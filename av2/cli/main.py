@@ -21,9 +21,9 @@ def info(source_video: str = ...):
     import yaml
 
     with av2.open(source_video) as file:
-        print(file.dict())
+        # print(file.dict())
         print(json.dumps(file.dict(), indent=4))
-        print(yaml.dump(file.dict(), indent=4))
+        # print(yaml.dump(file.dict(), indent=4))
 
 
 cli = click.CommandCollection(sources=[av2])
