@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 from av2 import __version__
 
 setuptools.setup(
-    name="idocker",
+    name="pyav2",
     version=__version__,
     author="ponponon",
     author_email="1729303158@qq.com",
