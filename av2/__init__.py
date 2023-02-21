@@ -1,10 +1,36 @@
 from av2.container.input import InputContainer
+from av2.container.output import OutputContainer
+from typing import overload, Literal, Union
 
 
-def open(file, mode=None, format=None, options=None,
+__version__ = '0.0.1'
+VERSION = __version__
+
+
+READ_MODE = Literal['r']
+WRITE_MODE = Literal['w']
+
+
+@overload
+def open(file: str, mode: READ_MODE = READ_MODE, format=None, options=None,
          container_options=None, stream_options=None,
          metadata_encoding='utf-8', metadata_errors='strict',
          buffer_size=32768, timeout=None, io_open=None) -> InputContainer:
+    pass
+
+
+@overload
+def open(file: str, mode: WRITE_MODE = READ_MODE, format=None, options=None,
+         container_options=None, stream_options=None,
+         metadata_encoding='utf-8', metadata_errors='strict',
+         buffer_size=32768, timeout=None, io_open=None) -> OutputContainer:
+    pass
+
+
+def open(file: str, mode='r', format=None, options=None,
+         container_options=None, stream_options=None,
+         metadata_encoding='utf-8', metadata_errors='strict',
+         buffer_size=32768, timeout=None, io_open=None) -> Union[InputContainer, OutputContainer]:
     """open(file, mode='r', **kwargs)
 
     Main entrypoint to opening files/streams.
@@ -50,8 +76,32 @@ def open(file, mode=None, format=None, options=None,
     More information on using input and output devices is available on the
     `FFmpeg website <https://www.ffmpeg.org/ffmpeg-devices.html>`_.
     """
-    import av
-    return av.open(file, mode, format, options,
-                   container_options, stream_options,
-                   metadata_encoding, metadata_errors,
-                   buffer_size, timeout, io_open)
+
+    # if isinstance(timeout, tuple):
+    #     open_timeout = timeout[0]
+    #     read_timeout = timeout[1]
+    # else:
+    #     open_timeout = timeout
+    #     read_timeout = timeout
+
+    if mode.startswith('r'):
+        return InputContainer(file, mode, format, options,
+                              container_options, stream_options,
+                              metadata_encoding, metadata_errors,
+                              buffer_size, timeout, io_open
+                              )
+    if mode.startswith('w'):
+        if stream_options:
+            raise ValueError(
+                "Provide stream options via Container.add_stream(..., options={}).")
+        return OutputContainer(file, mode, format, options,
+                               container_options, stream_options,
+                               metadata_encoding, metadata_errors,
+                               buffer_size, timeout, io_open
+                               )
+
+    # import av
+    # return av.open(file, mode, format, options,
+    #                container_options, stream_options,
+    #                metadata_encoding, metadata_errors,
+    #                buffer_size, timeout, io_open)
