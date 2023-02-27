@@ -3,7 +3,7 @@ from av2.container.output import OutputContainer
 from typing import overload, Literal, Union
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 VERSION = __version__
 
 

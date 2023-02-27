@@ -25,7 +25,7 @@ setuptools.setup(
         ]
     },
     install_requires=[
-        'pyav',
+        'av',
         'numpy',
         'rich',
         'click',
